@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css"
+    />
+    <style>
+       @import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
+        div {
+            font-family: "Jua";
+        }
+        .hide {
+        display: none !important;
+        }
+        </style>
+        <link rel="stylesheet" href="./assets/css/mytripplan.css"/>
+    <script src="./assets/js/nav.js"></script>
+</head>
+<body>
+    <!-- 상단 navbar start -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" style="background: linear-gradient(to right, #1e88de, #cfd6de);">
+      <nav class="container-xxl bd-gutter flex-wrap flex-lg-nowrap" aria-label="Main navigation">
+        <a class="navbar-brand text-primary fw-bold" href="index.html">
+          <img src="./assets/img/enjoytrip_logo.png" alt="" width="60" />
+          <span style="color: rgb(89, 218, 227)">SSAFY  Trip</span>
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse text-light" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-lg=0 ">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="localtrip.html">지역별여행지</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="mytripplan.html">나의여행계획</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="hotplace.html">핫플자랑하기</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="sharetrip.html">여행정보공유</a>
+            </li>
+          </ul>
+          <!-- 로그인 전 -->
+          <ul class="navbar-nav mb-2 me-2 mb-lg-0  not-logged-in">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="register.html">회원가입</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="login.html">로그인</a>
+            </li>
+          </ul>
+          <!-- 로그인 후 -->
+          <ul class="navbar-nav mb-2 me-2 mb-lg-0 logged-in hide">
+            <li class="nav-item">
+              <a class="nav-link " id="logout" aria-current="page" href="#">로그아웃</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="mypage.html">마이페이지</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                관리자
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="#"
+                    data-bs-toggle="modal"
+                    data-bs-target="#pollModal"
+                    >투표만들기</a
+                  >
+                </li>
+                <li><a class="dropdown-item" href="#">차트보기</a></li>
+                <li><a class="dropdown-item" href="#">회원관리</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </nav>
+    <!-- 상단 navbar end -->
+
+
+      <div class="container">
+        <div style="height: 70px"></div>
+        <h4 class="my-4 fw-bold display-5 text-center">내맘대로 여행코스!</h4>
+        <div class="map_wrap">
+          <div id="map" style="width:1300px;height:1000px;position:relative;overflow:hidden;"></div>
+            <div id="menu_wrap" class="bg_white">
+              <div class="option">
+                  <div>
+                      <form onsubmit="searchPlaces(); return false;">
+                          키워드 : <input type="text" value="" id="keyword" size="15"> 
+                          <button type="submit">검색하기</button> 
+                      </form>
+                  </div>
+              </div>
+              <hr>
+              <ul id="placesList"></ul>
+              <div id="pagination"></div>
+          </div>
+          <div id="select_wrap" class="bg_white">
+            <span class="route">나만의 여행 경로</span>
+            <div class="option">
+              <button onclick="displayRouteOnMap()">경로 표시</button>
+              <button onclick="alert('경로가 저장되었습니다.'); ">경로 저장</button>
+            </div>
+            <hr>
+            <ul id="selectList"></ul>
+        </div>
+        <button onclick="">경로 저장</button>
+        </div>
+        
+        </div>
+<!-- 하단 footer start -->
+<footer class="navbar navbar-expand-lg navbar-light bg-light border-top container justify-content-end fixed-bottom">
+    <div class="row">
+      <ul class="navbar-nav">
+        <li><a href="#" class="nav-link text-secondary">개인정보처리방침</a></li>
+        <li><a href="#" class="nav-link text-secondary">이용약관</a></li>
+        <li><a href="#" class="nav-link text-secondary">오시는길</a></li>
+        <li><label class="nav-link text-secondary">&copy; SSAFY Corp.</label></li>
+      </ul>
+    </div>
+  </footer>
+  <!-- 하단 footer end -->
+  
+      <script
+        type="text/javascript"
+        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=042543bf768e4a4b9cfa576c81c8d935&libraries=services"
+      ></script>
+      <script>
+        window.onload = function () {
+    loadFavoritesToSelectList();
+};
+        // 마커를 담을 배열입니다
+var markers = [];
+
+var mapContainer = document.getElementById("map");
+        var mapOption = {
+          center: new kakao.maps.LatLng(36.2, 127.7), // 초기값(서울시청) 예시
+          level: 12,
+        };
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+
+// 장소 검색 객체를 생성합니다
+var ps = new kakao.maps.services.Places();  
+
+// 검색 결과 목록이나 마커를 클릭했을 때 장소명을 표출할 인포윈도우를 생성합니다
+var infowindow = new kakao.maps.InfoWindow({zIndex:1});
+
+// 키워드로 장소를 검색합니다
+document.querySelector("form").addEventListener("submit", function (event) {
+        event.preventDefault(); // 기본 폼 제출 동작 방지
+        searchPlaces();
+    });
+
+// 키워드 검색을 요청하는 함수입니다
+function searchPlaces() {
+
+    var keyword = document.getElementById('keyword').value;
+    if (!keyword.replace(/^\s+|\s+$/g, '')) {
+        alert('키워드를 입력해주세요!');
+        return false;
+    }
+
+    // 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
+    ps.keywordSearch( keyword, placesSearchCB); 
+}
+
+// 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
+function placesSearchCB(data, status, pagination) {
+    if (status === kakao.maps.services.Status.OK) {
+
+        // 정상적으로 검색이 완료됐으면
+        // 검색 목록과 마커를 표출합니다
+        displayPlaces(data);
+
+        // 페이지 번호를 표출합니다
+        displayPagination(pagination);
+
+    } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+
+        alert('검색 결과가 존재하지 않습니다.');
+        return;
+
+    } else if (status === kakao.maps.services.Status.ERROR) {
+
+        alert('검색 결과 중 오류가 발생했습니다.');
+        return;
+
+    }
+}
+
+// 검색 결과 목록과 마커를 표출하는 함수입니다
+function displayPlaces(places) {
+
+    var listEl = document.getElementById('placesList'), 
+    menuEl = document.getElementById('menu_wrap'),
+    fragment = document.createDocumentFragment(), 
+    bounds = new kakao.maps.LatLngBounds(), 
+    listStr = '';
+    
+    // 검색 결과 목록에 추가된 항목들을 제거합니다
+    removeAllChildNods(listEl);
+
+    // 지도에 표시되고 있는 마커를 제거합니다
+    removeMarker();
+    
+    for ( var i=0; i<places.length; i++ ) {
+
+        // 마커를 생성하고 지도에 표시합니다
+        var placePosition = new kakao.maps.LatLng(places[i].y, places[i].x),
+            marker = addMarker(placePosition, i), 
+            itemEl = getListItem(i, places[i]); // 검색 결과 항목 Element를 생성합니다
+
+        // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
+        // LatLngBounds 객체에 좌표를 추가합니다
+        bounds.extend(placePosition);
+        // 마커와 검색결과 항목에 mouseover 했을때
+        // 해당 장소에 인포윈도우에 장소명을 표시합니다
+        // mouseout 했을 때는 인포윈도우를 닫습니다
+        (function(marker, title) {
+          kakao.maps.event.addListener(marker, 'mouseover', function() {
+            displayInfowindow(marker, title);
+          });
+          
+          kakao.maps.event.addListener(marker, 'mouseout', function() {
+            infowindow.close();
+          });
+
+          itemEl.onmouseover =  function () {
+            displayInfowindow(marker, title);
+          };
+          
+          
+          // 클릭 시 즐겨찾기에 추가
+          itemEl.onclick = (function(marker, title, placeData) {
+    return function () {
+        console.log(placeData);  // 클릭된 항목의 placeData 출력
+        let geocoder = new kakao.maps.services.Geocoder();
+
+        // 카카오 API를 사용해 도로명 주소를 좌표로 변환
+        geocoder.addressSearch(placeData.jibunAddress, function (result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+                let lat = parseFloat(result[0].y);
+                let lng = parseFloat(result[0].x);
+
+                placeData.lat = lat;
+                placeData.lng = lng;
+
+                // 기존 저장된 데이터 가져오기
+                let favorites = JSON.parse(localStorage.getItem("favorite")) || [];
+
+                // 중복 체크 후 추가
+                if (!favorites.some(fav => fav.name === placeData.name)) {
+                    favorites.push(placeData);
+                    localStorage.setItem("favorite", JSON.stringify(favorites));
+                    
+                    alert("즐겨찾기에 추가되었습니다!");
+                    loadFavoritesToSelectList();
+                } else {
+                    alert("이미 즐겨찾기에 추가된 장소입니다.");
+                }
+            } else {
+                alert("주소 검색에 실패했습니다. 다시 시도해주세요.");
+                console.error("주소 검색 실패:", placeData.roadAddress);
+            }
+        });
+    };
+})(marker, places[i].place_name, {
+    name: itemEl.querySelector("h5").innerText, 
+    roadAddress: itemEl.querySelector("span:nth-of-type(1)").innerText, 
+    jibunAddress: itemEl.querySelector("span.jibun").innerText, 
+    phone: itemEl.querySelector("span.tel").innerText 
+});
+
+
+// itemEl.onclick = function () {
+//     console.log(itemEl);
+
+//     let placeData = {
+//         name: itemEl.querySelector("h5").innerText, // 장소명
+//         roadAddress: itemEl.querySelector("span:nth-of-type(1)").innerText, // 도로명 주소
+//         jibunAddress: itemEl.querySelector("span.jibun").innerText, // 지번 주소
+//         phone: itemEl.querySelector("span.tel").innerText // 전화번호
+//     };
+
+//     let geocoder = new kakao.maps.services.Geocoder();
+
+//     // 카카오 API를 사용해 도로명 주소를 좌표로 변환
+//     geocoder.addressSearch(placeData.jibunAddress, function (result, status) {
+//         if (status === kakao.maps.services.Status.OK) {
+//             let lat = parseFloat(result[0].y);
+//             let lng = parseFloat(result[0].x);
+
+//             placeData.lat = lat;
+//             placeData.lng = lng;
+
+//             // 기존 저장된 데이터 가져오기
+//             let favorites = JSON.parse(localStorage.getItem("favorite")) || [];
+
+//             // 중복 체크 후 추가
+//             if (!favorites.some(fav => fav.name === placeData.name)) {
+//                 favorites.push(placeData);
+//                 localStorage.setItem("favorite", JSON.stringify(favorites));
+//                 alert("즐겨찾기에 추가되었습니다!");
+//             } else {
+//                 alert("이미 즐겨찾기에 추가된 장소입니다.");
+//             }
+//         } else {
+//             alert("주소 검색에 실패했습니다. 다시 시도해주세요.");
+//             console.error("주소 검색 실패:", placeData.roadAddress);
+//         }
+//     });
+// };
+
+
+            itemEl.onmouseout =  function () {
+                infowindow.close();
+            };
+        })(marker, places[i].place_name);
+
+        fragment.appendChild(itemEl);
+    }
+
+    // 검색결과 항목들을 검색결과 목록 Element에 추가합니다
+    listEl.appendChild(fragment);
+    menuEl.scrollTop = 0;
+
+    // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
+    map.setBounds(bounds);
+}
+
+// 검색결과 항목을 Element로 반환하는 함수입니다
+function getListItem(index, places) {
+
+    var el = document.createElement('li'),
+    itemStr = '<span class="markerbg marker_' + (index+1) + '"></span>' +
+                '<div class="info">' +
+                '   <h5>' + places.place_name + '</h5>';
+
+    if (places.road_address_name) {
+        itemStr += '    <span>' + places.road_address_name + '</span>' +
+                    '   <span class="jibun gray">' +  places.address_name  + '</span>';
+    } else {
+        itemStr += '    <span>' +  places.address_name  + '</span>'; 
+    }
+                 
+      itemStr += '  <span class="tel">' + places.phone  + '</span>' +
+                '</div>';           
+
+    el.innerHTML = itemStr;
+    el.className = 'item';
+
+    return el;
+}
+
+// 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
+function addMarker(position, idx, title) {
+    var imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
+        imageSize = new kakao.maps.Size(36, 37),  // 마커 이미지의 크기
+        imgOptions =  {
+            spriteSize : new kakao.maps.Size(36, 691), // 스프라이트 이미지의 크기
+            spriteOrigin : new kakao.maps.Point(0, (idx*46)+10), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
+            offset: new kakao.maps.Point(13, 37) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
+        },
+        markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions),
+            marker = new kakao.maps.Marker({
+            position: position, // 마커의 위치
+            image: markerImage 
+        });
+
+    marker.setMap(map); // 지도 위에 마커를 표출합니다
+    markers.push(marker);  // 배열에 생성된 마커를 추가합니다
+
+    return marker;
+}
+
+// 지도 위에 표시되고 있는 마커를 모두 제거합니다
+function removeMarker() {
+    for ( var i = 0; i < markers.length; i++ ) {
+        markers[i].setMap(null);
+    }   
+    markers = [];
+}
+
+// 검색결과 목록 하단에 페이지번호를 표시는 함수입니다
+function displayPagination(pagination) {
+    var paginationEl = document.getElementById('pagination'),
+        fragment = document.createDocumentFragment(),
+        i; 
+
+    // 기존에 추가된 페이지번호를 삭제합니다
+    while (paginationEl.hasChildNodes()) {
+        paginationEl.removeChild (paginationEl.lastChild);
+    }
+
+    for (i=1; i<=pagination.last; i++) {
+        var el = document.createElement('a');
+        el.href = "#";
+        el.innerHTML = i;
+
+        if (i===pagination.current) {
+            el.className = 'on';
+        } else {
+            el.onclick = (function(i) {
+                return function() {
+                    pagination.gotoPage(i);
+                }
+            })(i);
+        }
+
+        fragment.appendChild(el);
+    }
+    paginationEl.appendChild(fragment);
+}
+
+// 검색결과 목록 또는 마커를 클릭했을 때 호출되는 함수입니다
+// 인포윈도우에 장소명을 표시합니다
+function displayInfowindow(marker, title) {
+    var content = '<div style="padding:5px;z-index:1;">' + title + '</div>';
+
+    infowindow.setContent(content);
+    infowindow.open(map, marker);
+}
+
+ // 검색결과 목록의 자식 Element를 제거하는 함수입니다
+function removeAllChildNods(el) {   
+    while (el.hasChildNodes()) {
+        el.removeChild (el.lastChild);
+    }
+}
+function loadFavoritesToSelectList() {
+    let favorites = JSON.parse(localStorage.getItem("favorite")) || []; // 저장된 즐겨찾기 데이터 가져오기
+    let selectList = document.getElementById("selectList"); 
+    selectList.innerHTML = ""; // 기존 목록 초기화
+
+    if (favorites.length === 0) {
+        selectList.innerHTML = "<li>저장된 여행지가 없습니다.</li>";
+        return;
+    }
+
+    favorites.forEach((place, index) => {
+        let li = document.createElement("li");
+        li.innerHTML = `
+            <div class="info">
+                <h5>${place.name}</h5>
+                <p>${place.roadAddress}</p>
+                <p>${place.jibunAddress}</p>
+                <p>${place.phone}</p>
+                <button onclick="removeFromSelectList(${index})">삭제</button>
+            </div>
+        `;
+        selectList.appendChild(li);
+    });
+    
+
+
+}
+
+function removeFromSelectList(index) {
+    let favorites = JSON.parse(localStorage.getItem("favorite")) || [];
+    favorites.splice(index, 1); // 해당 인덱스 데이터 삭제
+    localStorage.setItem("favorite", JSON.stringify(favorites)); // 업데이트된 데이터 저장
+    loadFavoritesToSelectList(); // 목록 다시 불러오기
+}
+
+function addToFavorite(place) {
+    let favorites = JSON.parse(localStorage.getItem("favorite")) || [];
+    let placeData = {
+        name: place.place_name,
+        roadAddress: place.road_address_name || "",
+        jibunAddress: place.address_name || "",
+        phone: place.phone || "없음",
+        lat: place.y, // 위도 저장
+        lng: place.x  // 경도 저장
+    };
+    favorites.push(placeData);
+    localStorage.setItem("favorite", JSON.stringify(favorites)); // 업데이트된 데이터 저장
+}
+
+
+function displayRouteOnMap() {
+    let favorites = JSON.parse(localStorage.getItem("favorite")) || []; // 저장된 장소 가져오기
+    if (favorites.length < 2) {
+        alert("경로를 표시하려면 최소 두 개 이상의 장소가 필요합니다.");
+        return;
+    }
+
+    let path = favorites.map(place => new kakao.maps.LatLng(place.lat, place.lng)); // 경로 좌표 배열 생성
+
+    let polyline = new kakao.maps.Polyline({
+        path: path, // 좌표 배열 설정
+        strokeWeight: 5, // 선 두께
+        strokeColor: "#FF0000", // 선 색상
+        strokeOpacity: 0.7, // 선 투명도
+        strokeStyle: "solid" // 선 스타일
+    });
+
+    polyline.setMap(map); // 지도에 경로 표시
+    removeMarker();
+
+    // 지도 중심을 경로의 첫 번째 장소로 설정
+    map.setCenter(new kakao.maps.LatLng(36.2, 127.7));
+    map.setLevel(12);
+
+    // 총 거리 계산 (미터 단위 반환)
+    let totalDistance = polyline.getLength();
+    let totalKm = (totalDistance / 1000).toFixed(2); // km 단위로 변환, 소수점 2자리 표시
+
+    // 거리 정보 표시
+    let distanceOverlay = new kakao.maps.CustomOverlay({
+        position: path[Math.floor(path.length / 2)], // 경로의 중간 위치
+        content: `<div style="background-color: white; padding: 5px 10px; border: 1px solid black; border-radius: 5px;">
+                    총 거리: ${totalKm} km
+                  </div>`,
+        yAnchor: 1.5
+    });
+
+    distanceOverlay.setMap(map); // 지도에 표시
+}
+
+      
+      </script>
+
+</body>
+</html>

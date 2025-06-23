@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+         "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="com.ssafy.repository.CommentRepository">
+
+  <!-- Create -->
+  <insert id="CommentInsert" parameterType="com.ssafy.dto.CommentDTO" useGeneratedKeys="true" keyProperty="commentId">
+    INSERT INTO comments (post_id, user_id, content)
+    VALUES (#{postId}, #{userId}, #{content})
+  </insert>
+
+  <!-- Read All by Post (using view 'comment') -->
+  <select id="CommentSelectAllByPost" parameterType="int" resultType="com.ssafy.dto.CommentDTO">
+    SELECT 
+      comment_id  AS commentId,
+      post_id     AS postId,
+      user_id     AS userId,
+      author_id   AS authorId,
+      author_name AS authorName,
+      content,
+      likes,
+      created,
+      updated
+    FROM comment
+    WHERE post_id = #{postId}
+    ORDER BY created ASC
+  </select>
+
+  <!-- Read Top 3 by likes for a Post -->
+  <select id="CommentSelectTop3ByLikes" parameterType="int" resultType="com.ssafy.dto.CommentDTO">
+    SELECT 
+      comment_id  AS commentId,
+      post_id     AS postId,
+      user_id     AS userId,
+      author_id   AS authorId,
+      author_name AS authorName,
+      content,
+      likes,
+      created,
+      updated
+    FROM comment
+    WHERE post_id = #{postId}
+    ORDER BY likes DESC, created ASC
+    LIMIT 3
+  </select>
+
+  <!-- Read One -->
+  <select id="CommentSelect" parameterType="int" resultType="com.ssafy.dto.CommentDTO">
+    SELECT 
+      comment_id  AS commentId,
+      post_id     AS postId,
+      user_id     AS userId,
+      author_id   AS authorId,
+      author_name AS authorName,
+      content,
+      likes,
+      created,
+      updated
+    FROM comment
+    WHERE comment_id = #{commentId}
+  </select>
+
+  <!-- Update -->
+  <update id="CommentUpdate" parameterType="com.ssafy.dto.CommentDTO">
+    UPDATE comments
+       SET content = #{content},
+           likes   = #{likes}
+     WHERE comment_id = #{commentId}
+  </update>
+
+  <!-- Delete -->
+  <delete id="CommentDelete" parameterType="int">
+    DELETE FROM comments
+     WHERE comment_id = #{commentId}
+  </delete>
+
+  <!-- Likes 증가 (commentlikes 테이블 사용) -->
+  <insert id="incrementLikes" parameterType="map">
+    INSERT IGNORE INTO commentlikes (comment_id, user_id)
+    VALUES (#{commentId}, #{userId})
+  </insert>
+
+  <!-- Likes 감소 (commentlikes 테이블 사용) -->
+  <delete id="decrementLikes" parameterType="map">
+    DELETE FROM commentlikes
+     WHERE comment_id = #{commentId}
+       AND user_id = #{userId}
+  </delete>
+
+  <!-- like 유무 확인 -->
+  <select id="isCommentLiked" parameterType="map" resultType="int">
+    SELECT COUNT(*) FROM commentlikes
+    WHERE comment_id = #{commentId} AND user_id = #{userId}
+  </select>
+
+</mapper>

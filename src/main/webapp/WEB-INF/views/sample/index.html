@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css"
+    />
+    <style>
+       @import url('https://fonts.googleapis.com/css2?family=Jua&display=swap');
+        div {
+            font-family: "Jua";
+        }
+        .hide {
+        display: none !important;
+        }
+        /* .custom-navbar {
+    background-color: linear-gradient(circle,  #6f42c1,  #c03d3d); /* 원하는 색상 코드로 변경 
+  } */
+        </style>
+    <script src="./assets/js/nav.js"></script>
+</head>
+<body>
+
+    
+    <!-- 상단 navbar start -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" style="background: linear-gradient(to right, #1e88de, #cfd6de);">
+        <nav class="container-xxl bd-gutter flex-wrap flex-lg-nowrap" aria-label="Main navigation">
+          <a class="navbar-brand text-primary fw-bold" href="index.html">
+            <img src="./assets/img/enjoytrip_logo.png" alt="" width="60" />
+            <span style="color: rgb(89, 218, 227)">SSAFY  Trip</span>
+          </a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse text-light" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-lg=0 ">
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="localtrip.html">지역별여행지</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="mytripplan.html">나의여행계획</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="hotplace.html">핫플자랑하기</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="sharetrip.html">여행정보공유</a>
+              </li>
+            </ul>
+            <!-- 로그인 전 -->
+            <ul class="navbar-nav mb-2 me-2 mb-lg-0  not-logged-in">
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="register.html">회원가입</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="login.html">로그인</a>
+              </li>
+            </ul>
+            <!-- 로그인 후 -->
+            <ul class="navbar-nav mb-2 me-2 mb-lg-0 logged-in hide">
+              <li class="nav-item">
+                <a class="nav-link " id="logout" aria-current="page" href="#">로그아웃</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="mypage.html">마이페이지</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a
+                  class="nav-link dropdown-toggle"
+                  href="#"
+                  id="navbarDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  관리자
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      href="#"
+                      data-bs-toggle="modal"
+                      data-bs-target="#pollModal"
+                      >투표만들기</a
+                    >
+                  </li>
+                  <li><a class="dropdown-item" href="#">차트보기</a></li>
+                  <li><a class="dropdown-item" href="#">회원관리</a></li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </nav>
+      <!-- 상단 navbar end -->
+
+      <div class="container">
+        <div class="px-4 py-5 my-5 text-center">
+          <img src="./assets/img/꿈돌이.jpg" alt="" height="500px"/>
+        </div>
+        <div class="container text-center mt-4">
+            <hr class="my-4">
+            <h2 class="fw-bold">지역별 여행지</h2>
+            <p>지역별 여행지 확인</p>
+            <a href="localtrip.html" class="btn btn-info">보러 가기</a>
+        </div>
+        <div class="container text-center mt-4">
+            <hr class="my-4">
+            <h2 class="fw-bold">나만의 여행 계획!</h2>
+            <p>여행 경로, 숙박, 관광지, 예상 금액 등 나만의 멋진 계획을 공유해 주세요!</p>
+            <a href="mytripplan.html" class="btn btn-info">보러 가기</a>
+        </div>
+        <div class="container text-center mt-4">
+            <hr class="my-4">
+            <h2 class="fw-bold">핫플 자랑하기</h2>
+            <p>나만 알고 있는 핫플 보러가기!!!</p>
+            <a href="hotplace.html" class="btn btn-info">보러 가기</a>
+        </div>
+        <div class="alert bg-primary opacity-75 mt-3 text-center fs-1 fw-bold" role="alert">Enjoy!!! Trip은 여러분의 많은 참여를 기다립니다.</div>
+        <div id="map" style="width: 100%; height: 400px"></div>
+        </div>
+    </div>
+<!-- 하단 footer start -->
+<footer class="navbar navbar-expand-lg navbar-light bg-light border-top container justify-content-end fixed-bottom">
+    <div class="row">
+      <ul class="navbar-nav">
+        <li><a href="#" class="nav-link text-secondary">개인정보처리방침</a></li>
+        <li><a href="#" class="nav-link text-secondary">이용약관</a></li>
+        <li><a href="#" class="nav-link text-secondary">오시는길</a></li>
+      </ul>
+    </div>
+  </footer>
+  <!-- 하단 footer end -->
+
+</body>
+</html>

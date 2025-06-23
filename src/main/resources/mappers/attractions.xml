@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.repository.AttractionRepository">
+
+  <select id="getAttBycode"
+          parameterType="map"
+          resultType="com.ssafy.dto.AttractionDTO">
+    SELECT
+      no,
+      content_id,
+      title,
+      content_type_id,
+      area_code,
+      si_gun_gu_code,
+      first_image1    AS firstimg,
+      first_image2    AS secondimg,
+      map_level       AS maplv,
+      latitude        AS lati,
+      longitude       AS longi,
+      addr1,
+      homepage,
+      overview
+    FROM attractions
+    <trim prefix="WHERE" prefixOverrides="AND">
+      <if test="gugunCode   != -1">AND area_code        = #{gugunCode}</if>
+      <if test="sidoCode    != -1">AND si_gun_gu_code   = #{sidoCode}</if>
+      <if test="contentType != -1">AND content_type_id  = #{contentType}</if>
+      <if test="keyword != null and keyword != ''">AND title LIKE CONCAT('%', #{keyword}, '%')</if>
+    </trim>
+  </select>
+
+</mapper>

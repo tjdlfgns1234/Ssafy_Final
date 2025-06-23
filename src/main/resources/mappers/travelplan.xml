@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.repository.TravelPlanRepository">
+
+  <!-- 여행 계획 등록 -->
+  <insert id="insertTravelPlan" parameterType="com.ssafy.dto.TravelPlanDTO" useGeneratedKeys="true" keyProperty="planId">
+    INSERT INTO travelplans (user_id, description, routes, start_day, end_day)
+    VALUES (#{userId}, #{description}, #{routes}, #{start_day}, #{end_day})
+  </insert>
+
+  <!-- 전체 여행 계획 조회 -->
+  <select id="selectAllTravelPlans" resultType="com.ssafy.dto.TravelPlanDTO">
+    SELECT plan_id   AS planId,
+           user_id   AS userId,
+           description,
+           routes,
+           start_day,
+           end_day
+      FROM travelplans
+     ORDER BY plan_id DESC
+  </select>
+
+  <!-- 특정 사용자(userId)의 여행 계획 조회 -->
+  <select id="selectTravelPlansByUser" parameterType="int" resultType="com.ssafy.dto.TravelPlanDTO">
+    SELECT plan_id   AS planId,
+           user_id   AS userId,
+           description,
+           routes,
+           start_day,
+           end_day
+      FROM travelplans
+     WHERE user_id = #{userId}
+     ORDER BY plan_id DESC
+  </select>
+
+  <!-- 단일 여행 계획 조회 -->
+  <select id="selectTravelPlan" parameterType="int" resultType="com.ssafy.dto.TravelPlanDTO">
+    SELECT plan_id   AS planId,
+           user_id   AS userId,
+           description,
+           routes,
+           start_day,
+           end_day
+      FROM travelplans
+     WHERE plan_id = #{planId}
+  </select>
+
+  <!-- 여행 계획 수정 -->
+  <update id="updateTravelPlan" parameterType="com.ssafy.dto.TravelPlanDTO">
+    UPDATE travelplans set
+           description = #{description},
+           routes      = #{routes},
+           start_day   = #{start_day},
+           end_day     = #{end_day}
+     WHERE plan_id   = #{planId}
+  </update>
+
+  <!-- 여행 계획 삭제 -->
+  <delete id="deleteTravelPlan" parameterType="int">
+    DELETE FROM travelplans
+     WHERE plan_id = #{planId}
+  </delete>
+
+</mapper>

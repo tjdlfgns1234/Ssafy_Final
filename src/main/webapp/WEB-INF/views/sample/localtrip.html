@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Jua&display=swap");
+      div {
+        font-family: "Jua";
+      }
+      .hide {
+        display: none !important;
+      }
+    </style>
+    <script src="./assets/js/nav.js"></script>
+    <script
+        type="text/javascript"
+        src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=843969214838bd4993b8e9d512a2abfa&libraries=services"
+      ></script>
+  </head>
+  <body>
+    <!-- 상단 navbar start -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" style="background: linear-gradient(to right, #1e88de, #cfd6de);">
+      <nav class="container-xxl bd-gutter flex-wrap flex-lg-nowrap" aria-label="Main navigation">
+        <a class="navbar-brand text-primary fw-bold" href="index.html">
+          <img src="./assets/img/enjoytrip_logo.png" alt="" width="60" />
+          <span style="color: rgb(89, 218, 227)">SSAFY  Trip</span>
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse text-light" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-lg=0 ">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="localtrip.html">지역별여행지</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="mytripplan.html">나의여행계획</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="hotplace.html">핫플자랑하기</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="sharetrip.html">여행정보공유</a>
+            </li>
+          </ul>
+          <!-- 로그인 전 -->
+          <ul class="navbar-nav mb-2 me-2 mb-lg-0  not-logged-in">
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="register.html">회원가입</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="login.html">로그인</a>
+            </li>
+          </ul>
+          <!-- 로그인 후 -->
+          <ul class="navbar-nav mb-2 me-2 mb-lg-0 logged-in hide">
+            <li class="nav-item">
+              <a class="nav-link " id="logout" aria-current="page" href="#">로그아웃</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" aria-current="page" href="mypage.html">마이페이지</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                id="navbarDropdown"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                관리자
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li>
+                  <a
+                    class="dropdown-item"
+                    href="#"
+                    data-bs-toggle="modal"
+                    data-bs-target="#pollModal"
+                    >투표만들기</a
+                  >
+                </li>
+                <li><a class="dropdown-item" href="#">차트보기</a></li>
+                <li><a class="dropdown-item" href="#">회원관리</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </nav>
+    <!-- 상단 navbar end -->
+
+    <div class="container">
+      <div style="height: 70px"></div>
+      <h4 class="my-4 fw-bold display-5 text-center">지역별 여행지!</h4>
+
+      <!-- 지도 -->
+      <div>
+        <label for="">지역 코드 기반의 서비스(Enjoy Trip): </label>
+        <select id="areaCode">
+          <option value="" selected disabled>시도 선택</option>
+        </select>
+        <select id="sigunguCode">
+          <option value="" selected disabled>시군구 선택</option>
+        </select>
+        <select id="contentType">
+          <option value="" selected disabled>관광타입 선택</option>
+          <option value="AT4">관광지</option>
+          <option value="CT1">문화시설</option>
+          <!-- <option value="15">축제공연행사</option>
+          <option value="25">여행코스</option>
+          <option value="28">레포츠</option> -->
+          <option value="AD5">숙박</option>
+          <option value="CE7">카페</option>
+          <option value="FD6">음식점</option>
+        </select>
+        <button id="btn_trip_search">관광지 조회</button>
+      </div>
+
+      <div id="map" style="width: 1300px; height: 500px"></div>
+      
+      <script>
+        // 지도 기본 설정
+        var mapContainer = document.getElementById("map");
+        var mapOption = {
+          center: new kakao.maps.LatLng(37.5665, 126.978), // 초기값(서울시청) 예시
+          level: 5,
+        };
+        var map = new kakao.maps.Map(mapContainer, mapOption);
+	
+        // 주소 → 좌표 변환 객체
+        var geocoder = new kakao.maps.services.Geocoder();
+        // 장소 검색(카테고리 포함) 객체는, 맵 객체를 인자로 넘길 수 있음
+        var ps = new kakao.maps.services.Places(map);
+
+        // 인포윈도우 (마커 클릭 시 장소명 표시)
+        var infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
+
+        // 마커 배열(기존 마커 지우기용)
+        var markers = [];
+
+        // "관광지 조회" 버튼 클릭 시
+
+        document
+          .querySelector("#btn_trip_search")
+          .addEventListener("click", function () {
+            // 1) select에서 값(=텍스트) 가져오기
+            var sidoText = areaCode.options[areaCode.selectedIndex].text; // 시도명
+            var sigunguText =
+              sigunguCode.options[sigunguCode.selectedIndex].text; // 시군구명
+            var categoryCode = contentType.value; // 카테고리 코드
+
+            // 시도 + 시군구 조합으로 주소 생성 (예: "대전광역시 유성구")
+            var address = sidoText + " " + sigunguText;
+            // 2) 기존 마커 제거(재검색 시 마커가 누적되지 않도록)
+            removeMarkers();
+  
+            // 3) 주소를 좌표로 변환 → 지도 중심 이동
+            geocoder.addressSearch(address, function (result, status) {
+              if (status === kakao.maps.services.Status.OK) {
+                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                // 지도 중심을 해당 좌표로 이동
+                map.setCenter(coords);
+
+                // 4) 카테고리 검색: 지도 범위(`useMapBounds:true`) 기준
+                //    예: "FD6" => 음식점, "AD5" => 숙박, "CE7" => 카페 ...
+                ps.categorySearch(categoryCode, placesSearchCB, {
+                  useMapBounds: true,
+                });
+              } else {
+                alert("해당 주소를 찾을 수 없습니다.");
+              }
+            });
+          });
+        // 검색 완료 후 콜백
+        function placesSearchCB(data, status, pagination) {
+          if (status === kakao.maps.services.Status.OK) {
+            // 검색된 장소 정보를 바탕으로 마커 표시
+            for (var i = 0; i < data.length; i++) {
+              displayMarker(data[i]);
+            }
+          } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+            alert("검색 결과가 없습니다.");
+          } else {
+            alert("카테고리 검색 중 오류 발생");
+          }
+        }
+
+        // 마커 생성
+        function displayMarker(place) {
+          var marker = new kakao.maps.Marker({
+            map: map,
+            position: new kakao.maps.LatLng(place.y, place.x),
+          });
+          markers.push(marker);
+
+          // 마커 클릭 이벤트 - 인포윈도우에 장소명 표시
+          kakao.maps.event.addListener(marker, "click", function () {
+            var content =
+              '<div style="padding:5px;font-size:12px;">' +
+              place.place_name +
+              "</div>";
+            infowindow.setContent(content);
+            infowindow.open(map, marker);
+          });
+        }
+
+        // 기존 마커 제거
+        function removeMarkers() {
+          for (var i = 0; i < markers.length; i++) {
+            markers[i].setMap(null);
+          }
+          markers = [];
+          infowindow.close();
+        }
+      </script>
+      
+    </div>
+    <!-- 하단 footer start -->
+    <footer
+      class="navbar navbar-expand-lg navbar-light bg-light border-top container justify-content-end fixed-bottom"
+    >
+      <div class="row">
+        <ul class="navbar-nav">
+          <li>
+            <a href="#" class="nav-link text-secondary">개인정보처리방침</a>
+          </li>
+          <li><a href="#" class="nav-link text-secondary">이용약관</a></li>
+          <li><a href="#" class="nav-link text-secondary">오시는길</a></li>
+          <li>
+            <label class="nav-link text-secondary">&copy; SSAFY Corp.</label>
+          </li>
+        </ul>
+      </div>
+    </footer>
+    <!-- 하단 footer end -->
+
+    <!--서비스 ID 설정-->
+    <script
+      type="text/javascript"
+      src="https://sgisapi.kostat.go.kr/OpenAPI3/auth/javascriptAuth?consumer_key=D665C6F9-5FB1-3E8E-B17D-26F0225847DC"
+    defer></script>
+    <script src="./assets/js/keys.js"></script>
+    <script src="./assets/js/common.js"></script>
+    <script src="./assets/js/kostat.js"></script>
+    <script src="./assets/js/enjoytrip.js"></script>
+    <script>
+      const init = async () => {
+        // updateSido();
+        areaCode1();
+      };
+      init();
+    </script>
+  </body>
+</html>

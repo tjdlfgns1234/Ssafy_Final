@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.repository.MemberRepository">
+
+    <!-- 회원 등록 -->
+    <insert id="MemberInsert" parameterType="com.ssafy.dto.MemberDTO">
+        INSERT INTO member (id, pw, name, email, role)
+        VALUES (#{id}, #{pw}, #{name}, #{email}, 'user')
+    </insert>
+
+    <!-- 회원 수정 -->
+   <update id="MemberUpdate" parameterType="com.ssafy.dto.MemberDTO">
+	    UPDATE member
+	    <set>
+	        <if test="pw != null">
+	            pw = #{pw},
+	        </if>
+	        name = #{name},
+	        email = #{email}
+	    </set>
+	    WHERE id = #{id}
+	</update>	
+
+    <!-- 회원 삭제 -->
+    <delete id="MemberDelete" parameterType="String">
+        DELETE FROM member WHERE id = #{id}
+    </delete>
+
+    <!-- 전체 회원 조회 -->
+    <select id="MemberSelectAll" resultType="com.ssafy.dto.MemberDTO">
+        SELECT * FROM member
+    </select>
+
+    <!-- 특정 회원 조회 -->
+    <select id="MemberSelect" parameterType="String" resultType="com.ssafy.dto.MemberDTO">
+        SELECT * FROM member WHERE id = #{id}
+    </select>
+
+    <!-- 비밀번호 찾기 -->
+    <select id="findPassword" parameterType="String" resultType="String">
+        SELECT pw FROM member WHERE id = #{id}
+    </select>
+
+	<!-- ID 중복확인 -->
+	<select id="countById" parameterType="String" resultType="int">
+	    SELECT COUNT(*) FROM member WHERE id = #{id}
+	</select>
+	
+	<!-- Email 중복확인 -->
+	<select id="countByEmail" parameterType="String" resultType="int">
+	    SELECT COUNT(*) FROM member WHERE email = #{email}
+	</select>
+
+
+</mapper>

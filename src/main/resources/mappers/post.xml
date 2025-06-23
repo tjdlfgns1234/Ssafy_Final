@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.repository.PostRepository">
+
+  <!-- Create -->
+  <insert id="postInsert" parameterType="com.ssafy.dto.PostDTO" useGeneratedKeys="true" keyProperty="postId">
+    INSERT INTO posts (user_id, title, content, tags)
+    VALUES (#{id}, #{title}, #{content}, #{tags})
+  </insert>
+
+  <!-- Read All -->
+  <select id="postSelectAll" resultType="com.ssafy.dto.PostDTO">
+    SELECT
+      post_id      AS postId,
+      title        AS title,
+      content      AS content,
+      tags         AS tags,
+      created      AS created,
+      updated      AS updated,
+      id           AS id,
+      author_id    AS authorId,
+      author_name  AS authorName,
+      likes        AS likes,
+      comment_count AS commentCount
+    FROM post
+    ORDER BY created DESC
+  </select>
+
+  <!-- Read Top 3 by likes -->
+  <select id="postSelectTop3" resultType="com.ssafy.dto.PostDTO">
+    SELECT
+      post_id      AS postId,
+      title        AS title,
+      content      AS content,
+      tags         AS tags,
+      created      AS created,
+      updated      AS updated,
+      id           AS id,
+      author_id    AS authorId,
+      author_name  AS authorName,
+      likes        AS likes,
+      comment_count AS commentCount
+    FROM post
+    ORDER BY likes DESC, created DESC
+    LIMIT 3
+  </select>
+
+  <!-- Read by tag -->
+  <select id="postSelectByTag" parameterType="String" resultType="com.ssafy.dto.PostDTO">
+    SELECT
+      post_id      AS postId,
+      title        AS title,
+      content      AS content,
+      tags         AS tags,
+      created      AS created,
+      updated      AS updated,
+      id           AS id,
+      author_id    AS authorId,
+      author_name  AS authorName,
+      likes        AS likes,
+      comment_count AS commentCount
+    FROM post
+    WHERE tags LIKE CONCAT('%', #{tag}, '%')
+    ORDER BY created DESC
+  </select>
+
+  <!-- Read One -->
+  <select id="postSelect" parameterType="int" resultType="com.ssafy.dto.PostDTO">
+    SELECT
+      post_id      AS postId,
+      title        AS title,
+      content      AS content,
+      tags         AS tags,
+      created      AS created,
+      updated      AS updated,
+      id           AS id,
+      author_id    AS authorId,
+      author_name  AS authorName,
+      likes        AS likes,
+      comment_count AS commentCount
+    FROM post
+    WHERE post_id = #{postId}
+  </select>
+
+  <!-- Update -->
+  <update id="postUpdate" parameterType="com.ssafy.dto.PostDTO">
+    UPDATE posts
+       SET title   = #{title},
+           content = #{content},
+           tags    = #{tags},
+           updated = CURRENT_TIMESTAMP
+     WHERE post_id = #{postId}
+  </update>
+
+  <!-- Delete -->
+  <delete id="postDelete" parameterType="int">
+    DELETE FROM posts
+     WHERE post_id = #{postId}
+  </delete>
+
+  <!-- Likes 증가 -->
+  <insert id="incrementLikes" parameterType="map">
+    INSERT IGNORE INTO postlikes (post_id, user_id)
+    VALUES (#{postId}, #{userId})
+  </insert>
+
+  <!-- Likes 감소 -->
+  <delete id="decrementLikes" parameterType="map">
+    DELETE FROM postlikes
+     WHERE post_id = #{postId}
+       AND user_id = #{userId}
+  </delete>
+
+  <!-- 좋아요 유무 확인 -->
+  <select id="isPostLiked" parameterType="map" resultType="int">
+    SELECT COUNT(*) FROM postlikes
+    WHERE post_id = #{postId} AND user_id = #{userId}
+  </select>
+
+</mapper>

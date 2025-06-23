@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.repository.UserPlaceRepository">
+
+  <!-- 사용자 정의 장소 등록 -->
+  <insert id="UserPlaceInsert" parameterType="com.ssafy.dto.UserPlaceDTO" useGeneratedKeys="true" keyProperty="placeId">
+    INSERT INTO userplaces (user_id, name, latitude, longitude)
+    VALUES (#{userId}, #{name}, #{latitude}, #{longitude})
+  </insert>
+
+  <!-- 특정 사용자(userId)의 모든 장소 조회 -->
+  <select id="UserPlaceSelectAllByUser" parameterType="int" resultType="com.ssafy.dto.UserPlaceDTO">
+    SELECT place_id   AS placeId,
+           user_id    AS userId,
+           name,
+           latitude,
+           longitude,
+           created
+      FROM userplaces
+     WHERE user_id = #{userId}
+     ORDER BY created DESC
+  </select>
+
+  <!-- 단일 장소 조회 -->
+  <select id="UserPlaceSelect" parameterType="int" resultType="com.ssafy.dto.UserPlaceDTO">
+    SELECT place_id   AS placeId,
+           user_id    AS userId,
+           name,
+           latitude,
+           longitude,
+           created
+      FROM userplaces
+     WHERE place_id = #{placeId}
+  </select>
+
+  <!-- 장소 정보 수정 -->
+  <update id="UserPlaceUpdate" parameterType="com.ssafy.dto.UserPlaceDTO">
+    UPDATE userplaces
+       SET name      = #{name},
+           latitude  = #{latitude},
+           longitude = #{longitude}
+     WHERE place_id = #{placeId}
+  </update>
+
+  <!-- 장소 삭제 -->
+  <delete id="UserPlaceDelete" parameterType="int">
+    DELETE FROM userplaces
+     WHERE place_id = #{placeId}
+  </delete>
+
+</mapper>

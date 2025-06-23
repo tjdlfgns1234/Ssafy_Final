@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ssafy.repository.MetricsRepository">
+
+  <!--
+    MetricsDTO 필드명(memberCount 등) ↔ 뷰 컬럼명(member_count 등) 매핑
+  -->
+  <resultMap id="MetricsResultMap" type="com.ssafy.dto.MetricsDTO">
+    <result column="member_count"       property="memberCount"       jdbcType="BIGINT"/>
+    <result column="posts_count"        property="postsCount"        jdbcType="BIGINT"/>
+    <result column="comments_count"     property="commentsCount"     jdbcType="BIGINT"/>
+    <result column="postlikes_count"    property="postlikesCount"    jdbcType="BIGINT"/>
+    <result column="commentlikes_count" property="commentlikesCount" jdbcType="BIGINT"/>
+    <result column="userplaces_count"   property="userplacesCount"   jdbcType="BIGINT"/>
+    <result column="travelplans_count"  property="travelplansCount"  jdbcType="BIGINT"/>
+  </resultMap>
+
+  <!--
+    단일 행을 반환하는 뷰 조회 쿼리
+  -->
+  <select id="fetchMetrics" resultMap="MetricsResultMap">
+    SELECT
+      member_count,
+      posts_count,
+      comments_count,
+      postlikes_count,
+      commentlikes_count,
+      userplaces_count,
+      travelplans_count
+    FROM metrics
+  </select>
+
+</mapper>
